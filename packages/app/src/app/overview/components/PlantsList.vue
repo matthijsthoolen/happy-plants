@@ -12,6 +12,7 @@
         :pressed-mode="isPressedMode"
         :guid="plant.guid"
         :name="plant.name"
+        :watering="getWateringFrequency(plant)"
         :image-url="plant.imageURL"
       />
     </li>
@@ -57,6 +58,15 @@
       getPlantGallery (plant) {
         const gallery = plant.modules && plant.modules.find(m => m.type === 'gallery')
         return gallery ? gallery.value.list : []
+      },
+      getWateringFrequency (plant) {
+        for (var key in plant.modules) {
+          var module = plant.modules[key]
+          if (module.type === 'watering') {
+            return module.value.frequency
+          }
+        }
+        return ''
       },
       emitDeleteSelection (item) {
         this.$emit('delete-selection', item)

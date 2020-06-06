@@ -50,6 +50,10 @@
           </h1>
         </div>
 
+        <div v-if="watering !== ''" class="watering-frequency">
+          <feather-droplet />{{ watering }}
+        </div>
+
         <ul v-if="isListView && tags.length" class="preview-tags">
           <li v-for="tag of tags" :key="tag.label">
             <v-tag size="small">
@@ -87,7 +91,8 @@
       pressedMode: { type: Boolean, default: false, required: true },
       guid: { type: String, default: '', required: true },
       name: { type: String, default: '', required: true },
-      imageUrl: { type: [String, Boolean], default: '' }
+      imageUrl: { type: [String, Boolean], default: '' },
+      watering: { type: String, default: '', required: false }
     },
 
     components: {
@@ -102,7 +107,9 @@
       'feather-image': () =>
         import('vue-feather-icons/icons/ImageIcon' /* webpackChunkName: "icons" */),
       'feather-loader': () =>
-        import('vue-feather-icons/icons/LoaderIcon' /* webpackChunkName: "icons" */)
+        import('vue-feather-icons/icons/LoaderIcon' /* webpackChunkName: "icons" */),
+      'feather-droplet': () =>
+        import('vue-feather-icons/icons/DropletIcon' /* webpackChunkName: "icons" */)
     },
 
     data () {
