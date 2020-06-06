@@ -51,7 +51,7 @@
         </div>
 
         <div v-if="watering !== ''" class="watering-frequency">
-          <feather-droplet />{{ watering }}
+          <feather-droplet height="16" width="16"  />{{ watering }}
         </div>
 
         <ul v-if="isListView && tags.length" class="preview-tags">
