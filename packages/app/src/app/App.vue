@@ -133,6 +133,7 @@
         'updateStorage',
         'loadPlants',
         'loadTags',
+        'loadHousehold',
         'showNotification',
         'hideNotification',
         'updateAppHeader'
@@ -183,6 +184,7 @@
         this.showNotification({ message: 'You are currently offline.' })
       }
 
+      await this.loadHousehold()
       await this.loadPlants()
       await this.loadTags()
 

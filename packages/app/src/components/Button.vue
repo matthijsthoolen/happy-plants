@@ -1,5 +1,5 @@
 <template>
-  <button type="button" :class="[color, type]">
+  <button :type="buttonType" :class="[color, type]">
     <div v-if="loading || $slots.icon || $scopedSlots.icon" :class="getIconClass()">
       <feather-loader v-if="loading" />
       <slot v-else name="icon" />
@@ -22,6 +22,10 @@
       loading: {
         type: Boolean,
         default: false
+      },
+      buttonType: {
+        type: String,
+        default: 'button'
       },
       color: {
         type: String,

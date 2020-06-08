@@ -13,6 +13,11 @@ const orderMap = new Map([
   ['latest', ['created', 'desc']]
 ])
 
+async function loadHouseholdPlantsFirestore (state, commit) {
+  const plants = []
+  return plants
+}
+
 async function loadPlantsFirestore (state, commit) {
   const plants = []
   const [orderBy, sortBy] = orderMap.get(state.settings.orderBy)
@@ -89,9 +94,12 @@ export async function loadPlants ({ state, commit }) {
     commit('LOAD_PLANTS_FAILURE')
   }
 
-  if (state.storage.type === 'cloud' && state.user.id) {
+  if ((state.storage.type === 'cloud' || state.storage.type === 'household') && state.user.id) {
     try {
-      const plants = await loadPlantsFirestore(state, commit)
+      const plants = state.storage.type === 'cloud'
+        ? await loadPlantsFirestore(state, commit)
+        : await loadHouseholdPlantsFirestore(state, commit)
+
       const removals = plantsFromLocalforage.filter(p => !plants.find(p1 => p1.guid === p.guid))
 
       if (plantsFromLocalforage.length && removals.length) {

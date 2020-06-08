@@ -19,6 +19,11 @@ export default [
         component: () => import('./screens/SettingsStorage' /* webpackChunkName: "settings" */)
       },
       {
+        path: 'household',
+        name: 'SettingsHousehold',
+        component: () => import('./screens/SettingsHousehold' /* webpackChunkName: "settings" */)
+      },
+      {
         path: 'tags',
         name: 'SettingsTags',
         component: () => import('./screens/SettingsTags' /* webpackChunkName: "settings" */)

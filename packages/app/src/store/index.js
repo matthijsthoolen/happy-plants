@@ -48,6 +48,11 @@ const store = new Vuex.Store({
       type: 'local'
     },
 
+    household: {
+      id: false,
+      owner: false
+    },
+
     user: {
       authenticated: false,
       authFromRedirect: false,

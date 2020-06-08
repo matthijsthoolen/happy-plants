@@ -1,4 +1,5 @@
 export * from './data'
 export * from './settings'
+export * from './household'
 export * from './storage'
 export * from './tags'

@@ -16,6 +16,12 @@ export default function getMenuData () {
           type: 'link'
         },
         {
+          label: 'Household',
+          name: 'SettingsHousehold',
+          icon: 'home',
+          type: 'link'
+        },
+        {
           label: 'Tags',
           name: 'SettingsTags',
           icon: 'tag',

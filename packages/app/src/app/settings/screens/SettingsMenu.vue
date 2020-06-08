@@ -118,6 +118,8 @@
         import('vue-feather-icons/icons/SaveIcon' /* webpackChunkName: "icons" */),
       'feather-users': () =>
         import('vue-feather-icons/icons/UsersIcon' /* webpackChunkName: "icons" */),
+      'feather-home': () =>
+        import('vue-feather-icons/icons/HomeIcon' /* webpackChunkName: "icons" */),
       'feather-file-text': () =>
         import('vue-feather-icons/icons/FileTextIcon' /* webpackChunkName: "icons" */),
       'feather-twitter': () =>

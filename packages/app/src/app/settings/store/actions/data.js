@@ -24,7 +24,8 @@ export async function getAllData ({ state }) {
     settings: state.settings,
     plants: state.plants,
     tags: state.tags,
-    storage: state.storage
+    storage: state.storage,
+    household: state.household
   }
 }
 
@@ -46,6 +47,7 @@ export async function deleteAllData ({ state, commit }) {
     // Delete from localForage
     await deleteEntryLF('tags')
     await deleteEntryLF('storage')
+    await deleteEntryLF('household')
     await deleteEntryLF('settings')
     await getEntryLF(namespace)
       .then(Object.values)
