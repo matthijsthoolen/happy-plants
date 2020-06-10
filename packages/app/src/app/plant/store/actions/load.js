@@ -13,15 +13,12 @@ const orderMap = new Map([
   ['latest', ['created', 'desc']]
 ])
 
-async function loadHouseholdPlantsFirestore (state, commit) {
-  const plants = []
-  return plants
-}
-
 async function loadPlantsFirestore (state, commit) {
   const plants = []
   const [orderBy, sortBy] = orderMap.get(state.settings.orderBy)
-  const snapshot = await firestoreQuery([['users', state.user.id], [folder]])
+  const householdOwnerId = state.household.id ?? state.user.id
+
+  const snapshot = await firestoreQuery([['users', householdOwnerId], [folder]])
     .orderBy(orderBy, sortBy)
     .get()
 
@@ -31,7 +28,7 @@ async function loadPlantsFirestore (state, commit) {
 
   for (const doc of snapshot.docs) {
     const plant = await firestoreQuery([
-      ['users', state.user.id],
+      ['users', householdOwnerId],
       [folder, doc.id]
     ]).get()
     const plantData = plant.data()
@@ -84,6 +81,7 @@ async function loadPlantsLocalforage (state) {
 export async function loadPlants ({ state, commit }) {
   commit('LOAD_PLANTS_PROGRESS')
   let plantsFromLocalforage = []
+  const householdOwnerId = state.household.id ?? state.user.id
 
   try {
     plantsFromLocalforage = await loadPlantsLocalforage(state)
@@ -94,12 +92,9 @@ export async function loadPlants ({ state, commit }) {
     commit('LOAD_PLANTS_FAILURE')
   }
 
-  if ((state.storage.type === 'cloud' || state.storage.type === 'household') && state.user.id) {
+  if ((state.storage.type === 'cloud') && householdOwnerId) {
     try {
-      const plants = state.storage.type === 'cloud'
-        ? await loadPlantsFirestore(state, commit)
-        : await loadHouseholdPlantsFirestore(state, commit)
-
+      const plants = await loadPlantsFirestore(state, commit)
       const removals = plantsFromLocalforage.filter(p => !plants.find(p1 => p1.guid === p.guid))
 
       if (plantsFromLocalforage.length && removals.length) {

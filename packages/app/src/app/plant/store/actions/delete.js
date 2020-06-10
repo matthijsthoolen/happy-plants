@@ -17,9 +17,17 @@ export async function deletePlants ({ state, commit }, items) {
   commit('DELETE_PLANT_PROGRESS')
 
   if (state.storage.type === 'cloud') {
+    const householdOwnerId = state.household.id ?? state.user.id
+
+    // Delete actions are only allowed for owners of the household
+    if (householdOwnerId !== state.user.id) {
+      commit('DELETE_PLANTS_FAILURE')
+      return
+    }
+
     try {
       await Promise.all(items.map(async item => {
-        const path = [['users', state.user.id], [folder, item.guid]]
+        const path = [['users', householdOwnerId], [folder, item.guid]]
         await deleteEntryFire(path)
         if (item.blob && isBlobbable(item.blob)) {
           await deleteFile(path.concat(fileName))

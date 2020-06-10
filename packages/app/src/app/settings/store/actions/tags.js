@@ -21,7 +21,8 @@ export async function importTags ({ state, commit }, data) {
   commit('IMPORT_TAGS', { data, updated })
 
   if (state.storage.type === 'cloud') {
-    await addEntryFire([['users', state.user.id]], { tags: state.tags.data })
+    const householdOwnerId = state.household.id ?? state.user.id
+    await addEntryFire([['users', householdOwnerId]], { tags: state.tags.data })
   } else {
     await updateEntryLF('tags', state.tags.data)
   }
@@ -32,8 +33,9 @@ export async function loadTags ({ state, commit }, data = {}) {
   let tags = []
 
   if (state.storage.type === 'cloud' && state.user.id) {
+    const householdOwnerId = state.household.id ?? state.user.id
     try {
-      const data = await getEntryFire([['users', state.user.id]])
+      const data = await getEntryFire([['users', householdOwnerId]])
       if (data.exists) {
         tags = data.data()[namespace]
       }
@@ -63,8 +65,9 @@ export async function addTag ({ state, commit }, data) {
     commit('ADD_TAG_SUCCESS', { item: meta, updated })
   }
 
+  const householdOwnerId = state.household.id ?? state.user.id
   if (state.storage.type === 'cloud') {
-    await addEntryFire([['users', state.user.id]], { tags: state.tags.data })
+    await addEntryFire([['users', householdOwnerId]], { tags: state.tags.data })
   } else {
     await addEntryLF(namespace, state.tags.data)
   }
@@ -72,6 +75,14 @@ export async function addTag ({ state, commit }, data) {
 
 export async function deleteTag ({ state, commit }, data) {
   commit('DELETE_TAG_PROGRESS')
+  const householdOwnerId = state.household.id ?? state.user.id
+
+  // Delete actions can only be done by the owner
+  if (householdOwnerId !== state.user.id) {
+    commit('DELETE_TAG_FAILURE')
+    return
+  }
+
   const updated = Date.now()
   await updateEntryLF('updated', updated)
   let tags = state.tags.data
@@ -84,7 +95,7 @@ export async function deleteTag ({ state, commit }, data) {
 
   if (state.storage.type === 'cloud') {
     try {
-      await updateEntryFire([['users', state.user.id]], { tags })
+      await updateEntryFire([['users', householdOwnerId]], { tags })
     } catch (error) {
       commit('DELETE_TAG_FAILURE')
     }
@@ -102,7 +113,8 @@ export async function updateTag ({ state, commit }, data) {
   commit('UPDATE_TAG', { item: meta })
 
   if (state.storage.type === 'cloud') {
-    await updateEntryFire([['users', state.user.id]], { tags: state.tags.data })
+    const householdOwnerId = state.household.id ?? state.user.id
+    await updateEntryFire([['users', householdOwnerId]], { tags: state.tags.data })
   } else {
     await addEntryLF(namespace, state.tags.data)
   }

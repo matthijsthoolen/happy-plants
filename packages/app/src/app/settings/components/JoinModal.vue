@@ -51,7 +51,7 @@
     methods: {
       updateHouseholdId (event) {
         if (!event.target.value) return
-        this.newHouseholdId = event.target.value
+        this.newHouseholdId = event.target.value.trim()
       },
       emitCloseDialog () {
         Object.assign(this.$data, this.$options.data()) // Reset state

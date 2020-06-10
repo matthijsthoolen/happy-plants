@@ -18,7 +18,8 @@ const folder = 'plants'
 const fileName = 'cover.png'
 
 async function addPlantFirestore (state, meta) {
-  const path = [['users', state.user.id], [folder, meta.guid]]
+  const householdOwnerId = state.household.id ?? state.user.id
+  const path = [['users', householdOwnerId], [folder, meta.guid]]
   const hasFile = meta.blob && isBlobbable(meta.blob)
   const blob = meta.blob
   await addEntryFire(path, {

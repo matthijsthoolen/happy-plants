@@ -4,7 +4,6 @@ export default {
   },
 
   LOAD_HOUSEHOLD_SUCCESS (state, payload) {
-    console.log(payload)
     state.household.loading = false
     state.household.finished = true
     state.household = payload.household || state.household

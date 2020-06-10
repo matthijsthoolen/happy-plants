@@ -9,7 +9,7 @@
       @content-error="showHouseUpdateError"
       @close-dialog="closeModal"
     />
-    <section class="about-intro box">
+    <section class="about-introh box">
       <feather-home />Share your plants with others so they can help you take care of the plants!
     </section>
 
@@ -23,11 +23,14 @@
       <v-button
         color="plain"
         class="edit"
-        aria-label="Edit household id"
+        aria-label="Edit or add household id"
         @click.native="openJoinModal()"
       >
-        <template v-slot:icon>
+        <template v-if="householdId" v-slot:icon>
           Join
+        </template>
+        <template v-if="householdId !== false" v-slot:icon>
+          Edit
         </template>
       </v-button>
     </section>

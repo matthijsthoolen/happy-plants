@@ -19,7 +19,8 @@ export async function updatePlant (action, { state, commit }, data) {
   commit(action, { item: data, updated })
 
   if (state.storage.type === 'cloud') {
-    const path = [['users', state.user.id], [folder, state.plants.selected.guid]]
+    const householdOwnerId = state.household.id ?? state.user.id
+    const path = [['users', householdOwnerId], [folder, state.plants.selected.guid]]
     const { imageURL, blob, ...selected } = state.plants.selected
 
     if (action === 'UPDATE_PLANT_PHOTO') {

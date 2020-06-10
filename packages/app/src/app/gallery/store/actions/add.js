@@ -16,8 +16,9 @@ const rootFolder = 'plants'
 const folder = 'gallery'
 
 async function addGalleryItemFirestore (state, meta) {
+  const householdOwnerId = state.household.id ?? state.user.id
   const path = [
-    ['users', state.user.id],
+    ['users', householdOwnerId],
     [rootFolder, state.plants.selected.guid],
     [folder, meta.item.guid]
   ]

@@ -18,6 +18,14 @@ export async function deleteGalleryItem ({ state, commit, dispatch }, data) {
   await updateEntryLF('updated', updated)
 
   if (state.storage.type === 'cloud') {
+    const householdOwnerId = state.household.id ?? state.user.id
+
+    // Only allowed for the owner of the household
+    if (householdOwnerId !== state.user.id) {
+      commit('DELETE_GALLERY_ITEM_FAILURE')
+      return
+    }
+
     try {
       const path = [
         ['users', state.user.id],

@@ -7,6 +7,7 @@
       :created="plant.created"
       :loading="deletePlantProgress"
       @close-modal="closePlantEditModal"
+      @content-error="showRemovalError"
       @delete-plant="deletePlantFromModal"
     />
 
@@ -264,6 +265,11 @@
       },
       onSunshineUpdate (sunshine) {
         this.updateSunshineModule({ guid: this.plant.guid, sunshine })
+      },
+      showRemovalError () {
+        this.showNotification({
+          message: 'Could not change to household.'
+        })
       },
       async deletePlantFromModal () {
         this.deletePlantProgress = true

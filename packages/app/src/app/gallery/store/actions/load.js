@@ -8,8 +8,9 @@ const folder = 'gallery'
 
 async function loadGalleryFirestore ({ state, commit }, guid = state.plants.selected.guid) {
   const gallery = []
+  const householdOwnerId = state.household.id ?? state.user.id
   const snapshot = await firestoreQuery([
-    ['users', state.user.id],
+    ['users', householdOwnerId],
     [rootFolder, guid],
     [folder]
   ]).get()
@@ -17,7 +18,7 @@ async function loadGalleryFirestore ({ state, commit }, guid = state.plants.sele
 
   for (const doc of snapshot.docs) {
     const item = await firestoreQuery([
-      ['users', state.user.id],
+      ['users', householdOwnerId],
       [rootFolder, guid],
       [folder, doc.id]
     ]).get()
