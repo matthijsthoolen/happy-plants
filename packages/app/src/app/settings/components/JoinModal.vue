@@ -28,7 +28,7 @@
 
 <script>
   export default {
-    name: 'TagModal',
+    name: 'JoinModal',
 
     props: {
       show: { type: Boolean, default: false },
@@ -59,7 +59,6 @@
       },
       updateHousehold () {
         const data = {
-          ...this.householdId,
           id: this.newHouseholdId === ''
             ? this.householdId
             : this.newHouseholdId

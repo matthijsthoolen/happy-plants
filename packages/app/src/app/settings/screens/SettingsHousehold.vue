@@ -3,13 +3,18 @@
     <!-- Modal for joining household tags. -->
     <join-modal
       :show="showModal"
+      :household-id="getHouseholdId"
       :loading="updateHouseholdProgress"
       @content-update="editHouseholdId"
-      @content-error="showTagUpdateError"
+      @content-error="showHouseUpdateError"
       @close-dialog="closeModal"
     />
     <section class="about-intro box">
       <feather-home />Share your plants with others so they can help you take care of the plants!
+    </section>
+
+    <section v-if="householdId" class="about-intro blue box">
+      <feather-home />You are currently in household: {{ householdId }}
     </section>
 
     <section class="about-intro green box">
@@ -18,7 +23,7 @@
       <v-button
         color="plain"
         class="edit"
-        aria-label="Edit tag"
+        aria-label="Edit household id"
         @click.native="openJoinModal()"
       >
         <template v-slot:icon>
@@ -31,13 +36,24 @@
 
 <script>
   import JoinModal from '@/app/settings/components/JoinModal'
-  import { mapActions } from 'vuex'
+  import { mapState, mapActions } from 'vuex'
 
   export default {
     name: 'SettingsHousehold',
 
     meta: {
       title: 'Your household'
+    },
+
+    computed: {
+      ...mapState({
+        householdId: state => state.household.id
+      }),
+      getHouseholdId () {
+        return this.householdId
+          ? this.householdId
+          : ''
+      }
     },
 
     components: {
@@ -60,20 +76,20 @@
       ]),
       closeModal () {
         this.showModal = false
-        this.selectedTag = null
       },
-      closeDialog () {
-        this.showDialog = false
-        this.selectedTag = null
-      },
-      showTagUpdateError (tag) {
+      showHouseUpdateError () {
         this.showNotification({
-          message: `A tag with name "${tag.label}" already exists.`
+          message: 'Could not change to household.'
         })
       },
       async editHouseholdId (householdId) {
         this.updateHouseholdProgress = true
-        await this.addHouseholdId(householdId)
+
+        if (this.householdId) {
+          await this.updateHouseholdId(householdId)
+        } else {
+          await this.addHouseholdId(householdId)
+        }
         this.updateHouseholdProgress = false
 
         this.showNotification({ message: 'Changed household.' })

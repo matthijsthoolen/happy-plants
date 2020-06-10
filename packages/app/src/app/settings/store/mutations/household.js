@@ -7,12 +7,10 @@ export default {
     console.log(payload)
     state.household.loading = false
     state.household.finished = true
-    state.updated = Date.now()
-    state.household = payload.household || state.tags.household
+    state.household = payload.household || state.household
   },
 
   UPDATE_HOUSEHOLD_ID (state, payload) {
-    console.log(payload)
     state.household = Object.assign({},
       state.household,
       { id: payload.id || state.household.id }
