@@ -24,6 +24,19 @@
       />
     </div>
 
+    <div v-show="waterMode" :class="getLayerClass('delete')">
+      <feather-droplet
+        v-if="isWaterMode"
+        class="reverse"
+        key="icon-trash"
+      />
+      <feather-circle
+        v-else
+        class="reverse"
+        key="icon-minus"
+      />
+    </div>
+
     <div class="preview-content">
       <div :class="['preview-image', { 'box': isListView }]">
         <feather-loader v-if="contentLoading && !imageUrl" />
@@ -89,6 +102,7 @@
       gallery: { type: Array, default: () => [] },
       deleteMode: { type: Boolean, default: false, required: true },
       pressedMode: { type: Boolean, default: false, required: true },
+      waterMode: { type: Boolean, default: false, required: true },
       guid: { type: String, default: '', required: true },
       name: { type: String, default: '', required: true },
       imageUrl: { type: [String, Boolean], default: '' },
@@ -122,13 +136,16 @@
 
     computed: {
       frozen () {
-        return this.deleteMode || this.categoriseMode || this.pressedMode
+        return this.deleteMode || this.categoriseMode || this.pressedMode || this.waterMode
       },
       isDeleteMode () {
         return this.deleteMode && this.selected
       },
       isPressedMode () {
         return this.pressedMode && (this.pressed || this.selected)
+      },
+      isWaterMode () {
+        return this.waterMode && this.selected
       },
       isListView () {
         return this.type === 'list'
@@ -168,6 +185,7 @@
           selected: (
             (this.pressed && type === 'pressed') ||
             (this.deleteMode && type === 'delete' && this.selected) ||
+            (this.waterMode && type === 'water' && this.selected) ||
             (this.categoriseMode && type === 'category' && this.selected)
           )
         }]
@@ -203,6 +221,15 @@
           guid: this.guid,
           pressed: this.pressed
         })
+      },
+      emitWaterSelection () {
+        const type = 'toggle-water-selection'
+        const data = {
+          guid: this.guid,
+          selected: this.selected
+        }
+
+        this.$emit(type, data)
       },
       emitSelection () {
         const type = 'toggle-delete-selection'

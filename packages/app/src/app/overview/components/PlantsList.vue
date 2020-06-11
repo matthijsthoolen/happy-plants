@@ -4,12 +4,14 @@
       <plant-preview
         @toggle-delete-selection="emitDeleteSelection"
         @toggle-pressed-selection="emitPressedSelection"
+        @toggle-water-selection="emitWaterSelection"
         :content-loading="!plant.guid"
         :tags="plantTags(plant.guid)"
         :gallery="getPlantGallery(plant)"
         :type="type"
         :delete-mode="isDeleteMode"
         :pressed-mode="isPressedMode"
+        :water-mode="isWaterMode"
         :guid="plant.guid"
         :name="plant.name"
         :watering="getWateringFrequency(plant)"
@@ -32,7 +34,8 @@
       plants: { type: Array, default: () => [], required: true },
       tags: { type: Array, default: () => [], required: true },
       isDeleteMode: { type: Boolean, default: false, required: true },
-      isPressedMode: { type: Boolean, default: false, required: true }
+      isPressedMode: { type: Boolean, default: false, required: true },
+      isWaterMode: { type: Boolean, default: false, required: true }
     },
 
     components: {
@@ -73,6 +76,9 @@
       },
       emitPressedSelection (item) {
         this.$emit('pressed-selection', item)
+      },
+      emitWaterSelection (item) {
+        this.$emit('water-selection', item)
       }
     }
   }

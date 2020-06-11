@@ -24,6 +24,29 @@
       </div>
     </better-dialog>
 
+    <better-dialog
+      id="overview-dialog"
+      type="info"
+      :show="showWaterDialog"
+      @close-dialog="cancelWaterMode"
+    >
+      <template v-slot:headline>
+        <span>Are you sure?</span>
+      </template>
+      <div>
+        <p>
+          You are about to mark <strong>{{ selection.length }}</strong> plants as being watered.
+        </p>
+        <v-button
+          color="yellow"
+          :loading="deletePlantsProgress"
+          @click.native="confirmWaterPlants"
+        >
+          Yes, mark plants
+        </v-button>
+      </div>
+    </better-dialog>
+
     <div v-if="showBackdrop"
          class="overview-backdrop"
          @click="hideBackdrop"
@@ -64,11 +87,13 @@
         v-if="plantsLoading || plants.length !== 0"
         @delete-selection="toggleDeleteSelection"
         @pressed-selection="togglePressedSelection"
+        @water-selection="toggleWaterSelection"
         :content-loading="plantsLoading"
         :plants="filteredPlants"
         :tags="tags"
         :type="viewMode"
         :is-delete-mode="isDeleteMode"
+        :is-water-mode="isWaterMode"
         :is-pressed-mode="isPressedMode"
       />
 
@@ -91,11 +116,19 @@
           @delete-selection="activateDeleteMode"
         />
 
+        <water-menu
+          v-if="isWaterMode"
+          :selected="this.selection.length"
+          @cancel-selection="cancelWaterMode"
+          @water-selection="activateWaterMode"
+        />
+
         <overview-menu
           v-if="showMenu"
           :no-elements="!plants.length"
           :show-viewmode="!!plants.length"
           :show-delete="!!plants.length"
+          :show-water="!!plants.length"
           :disable-menu="isViewMode"
           @clicked-item="updateEditMode"
         />
@@ -109,6 +142,7 @@
 
   import OverviewMenu from '@/app/overview/components/Menu'
   import DeleteMenu from '@/app/overview/components/DeleteMenu'
+  import WaterMenu from '@/app/overview/components/WaterMenu'
   import PlantsList from '@/app/overview/components/PlantsList'
   import ViewmodeMenu from '@/app/overview/components/ViewmodeMenu'
   import '@/assets/icons/cactus'
@@ -120,6 +154,7 @@
       'plants-list': PlantsList,
       'overview-menu': OverviewMenu,
       'delete-menu': DeleteMenu,
+      'water-menu': WaterMenu,
       'viewmode-menu': ViewmodeMenu,
       'feather-x': () =>
         import('vue-feather-icons/icons/XIcon' /* webpackChunkName: "icons" */),
@@ -153,6 +188,9 @@
       },
       isPressedMode () {
         return this.editMode === 'pressed'
+      },
+      isWaterMode () {
+        return this.editMode === 'water'
       },
       footerClass () {
         return ['overview-footer-menu', {
@@ -204,8 +242,10 @@
         selection: [],
         editMode: false,
         showDialog: false,
+        showWaterDialog: false,
         showBackdrop: false,
-        deletePlantsProgress: false
+        deletePlantsProgress: false,
+        waterPlantsProgress: false
       }
     },
 
@@ -242,9 +282,16 @@
           this.selection = this.selection.filter(s => s.guid !== item.guid)
         }
       },
+      toggleWaterSelection (item) {
+        if (item.selected) {
+          this.selection.push(item)
+        } else {
+          this.selection = this.selection.filter(s => s.guid !== item.guid)
+        }
+      },
       togglePressedSelection (item) {
         // this.editMode = 'pressed'
-        this.editMode = 'delete'
+        this.editMode = 'water'
         if (item.pressed) {
           this.selection.push(item)
         } else {
@@ -280,6 +327,30 @@
 
         this.showNotification({ message })
         this.cancelDeleteMode()
+      },
+      async confirmWaterPlants () {
+        const message = this.selection.length > 1
+          ? `Watered ${this.selection.length} plants.`
+          : `Watered ${this.selection.length} plant.`
+
+        this.waterPlantsProgress = true
+        // await this.waterPlants(this.selection)
+        this.waterPlantsProgress = false
+
+        this.showNotification({ message })
+        this.cancelWaterMode()
+      },
+      activateWaterMode () {
+        // If the water mode is already active, the selected elements should
+        // be deleted and the mode deactivated again.
+        if (this.isWaterMode && this.selection.length) {
+          this.showWaterDialog = true
+        }
+
+        this.editMode = 'water'
+      },
+      cancelWaterMode () {
+        this.reset()
       },
       updateEditMode (type) {
         if (type === 'delete' && this.householdOwnerId !== this.userId) {

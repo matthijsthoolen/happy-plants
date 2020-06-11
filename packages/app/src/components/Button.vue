@@ -12,7 +12,7 @@
 </template>
 
 <script>
-  const colors = ['plain', 'grey', 'default', 'yellow', 'red', 'transparent']
+  const colors = ['plain', 'grey', 'default', 'yellow', 'red', 'transparent', 'green']
   const types = ['normal', 'circle', 'small']
 
   export default {

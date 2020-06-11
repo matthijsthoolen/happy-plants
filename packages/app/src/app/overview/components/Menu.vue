@@ -43,6 +43,18 @@
           </template>
         </v-button>
       </li>
+      <li v-if="showWater">
+        <v-button
+          color="transparent"
+          aria-label="Trash"
+          class="water"
+          @click.native.prevent="emitMenuAction('water')"
+        >
+          <template v-slot:icon>
+            <feather-droplet />
+          </template>
+        </v-button>
+      </li>
     </ul>
   </div>
 </template>
@@ -56,6 +68,8 @@
     components: {
       'feather-trash': () =>
         import('vue-feather-icons/icons/Trash2Icon' /* webpackChunkName: "icons" */),
+      'feather-droplet': () =>
+        import('vue-feather-icons/icons/DropletIcon' /* webpackChunkName: "icons" */),
       'feather-grid': () =>
         import('vue-feather-icons/icons/GridIcon' /* webpackChunkName: "icons" */),
       'feather-x': () =>
@@ -65,6 +79,7 @@
     props: {
       noElements: { type: Boolean, default: false },
       showDelete: { type: Boolean, default: true },
+      showWater: { type: Boolean, default: true },
       showViewmode: { type: Boolean, default: true },
       disableMenu: { type: Boolean, default: false }
     },
