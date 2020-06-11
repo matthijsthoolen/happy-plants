@@ -138,7 +138,9 @@
         viewMode: state => state.settings.viewMode,
         orderBy: state => state.settings.orderBy,
         filterBy: state => state.settings.filterBy,
-        tags: state => state.tags.data
+        tags: state => state.tags.data,
+        userId: state => state.user.id,
+        householdOwnerId: state => state.household.id ?? state.user.id
       }),
       noPlantData () {
         return !this.plantsLoading && this.plants.length === 0
@@ -250,6 +252,12 @@
         }
       },
       activateDeleteMode () {
+        if (this.householdOwnerId !== this.userId) {
+          this.showNotification({
+            message: 'A tag can only be removed by the household owner'
+          })
+          return
+        }
         // If the delete mode is already active, the selected elements should
         // be deleted and the mode deactivated again.
         if (this.isDeleteMode && this.selection.length) {
@@ -274,6 +282,12 @@
         this.cancelDeleteMode()
       },
       updateEditMode (type) {
+        if (type === 'delete' && this.householdOwnerId !== this.userId) {
+          this.showNotification({
+            message: 'Plants can only be removed by the owner'
+          })
+          return
+        }
         if (type === 'view-mode-toggle') {
           this.hideBackdrop()
           return

@@ -129,7 +129,9 @@
     computed: {
       ...mapState({
         tags: state => state.tags.data,
-        plants: state => state.plants.data
+        plants: state => state.plants.data,
+        userId: state => state.user.id,
+        householdOwnerId: state => state.household.id ?? state.user.id
       }),
       hasTagName () {
         return this.tagName !== ''
@@ -181,6 +183,13 @@
         this.showModal = true
       },
       openTagDialog (event, tag) {
+        if (this.householdOwnerId !== this.userId) {
+          this.showNotification({
+            message: 'A tag can only be removed by the household owner'
+          })
+          return
+        }
+
         this.selectedTag = tag
         this.showDialog = true
 

@@ -128,7 +128,9 @@
         plant: state => state.plants.selected,
         tags: state => state.tags.data,
         galleries: state => state.gallery,
-        navigatingFromView: state => state.route.from.name
+        navigatingFromView: state => state.route.from.name,
+        userId: state => state.user.id,
+        householdOwnerId: state => state.household.id ?? state.user.id
       }),
       ...mapGetters({
         plantTags: 'getPlantTags',
@@ -272,6 +274,13 @@
         })
       },
       async deletePlantFromModal () {
+        if (this.householdOwnerId !== this.userId) {
+          this.showNotification({
+            message: 'A plant can only be removed by the household owner'
+          })
+          return
+        }
+
         this.deletePlantProgress = true
         await this.deletePlants([{ guid: this.plant.guid }])
         this.deletePlantProgress = false
