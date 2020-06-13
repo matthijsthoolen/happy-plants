@@ -24,18 +24,6 @@ export async function waterPlants ({ state, commit }, items) {
         }
 
         plantActions[Date.now()] = 'water'
-
-        const lastAction = Object.keys(plantActions).reduce((a, b) => plantActions[a] > plantActions[b] ? a : b)
-
-        console.log(typeof lastAction)
-
-        const oneDay = 24 * 60 * 60 * 1000
-        const firstDate = new Date(parseInt(lastAction))
-        const secondDate = new Date()
-
-        const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay))
-        console.log(diffDays)
-
         await updateEntryFire(path, { plantActions: plantActions })
       }))
     } catch (error) {
