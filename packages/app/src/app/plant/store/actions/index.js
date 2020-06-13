@@ -3,6 +3,7 @@ import { getPlantStructure } from '@/app/plant/utils'
 
 export * from './add'
 export * from './delete'
+export * from './water'
 export * from './load'
 export * from './update'
 

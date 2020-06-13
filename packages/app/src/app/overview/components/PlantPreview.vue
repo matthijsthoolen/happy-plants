@@ -64,7 +64,7 @@
         </div>
 
         <div v-if="watering !== ''" class="watering-frequency">
-          <feather-droplet height="16" width="16"  />{{ watering }}
+          <feather-droplet height="16" width="16" />{{ watering }} <span v-if="daysAgo !== ''">({{ daysAgo }})</span>
         </div>
 
         <ul v-if="isListView && tags.length" class="preview-tags">
@@ -106,7 +106,8 @@
       guid: { type: String, default: '', required: true },
       name: { type: String, default: '', required: true },
       imageUrl: { type: [String, Boolean], default: '' },
-      watering: { type: String, default: '', required: false }
+      watering: { type: String, default: '', required: false },
+      plantActions: { type: Object, default: () => {}, required: true }
     },
 
     components: {
@@ -164,6 +165,19 @@
           'select-pressed': this.pressedMode && this.pressed && this.selected,
           select: (this.pressedMode || this.deleteMode)
         }]
+      },
+      daysAgo () {
+        if (Object.keys(this.plantActions).length === 0) {
+          return ''
+        }
+
+        const lastWatering = Object.keys(this.plantActions).reduce(
+          (a, b) => this.plantActions[a] > this.plantActions[b] ? a : b
+        )
+        const lastWateringDate = new Date(parseInt(lastWatering))
+        const diffDays = Math.round(Math.abs((new Date() - lastWateringDate) / 86400000))
+
+        return diffDays
       }
     },
 

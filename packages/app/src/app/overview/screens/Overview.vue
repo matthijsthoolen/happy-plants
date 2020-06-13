@@ -268,6 +268,7 @@
       ...mapActions([
         'loadPlants',
         'deletePlants',
+        'waterPlants',
         'showNotification',
         'updateViewmode',
         'updateAppHeader'
@@ -334,7 +335,7 @@
           : `Watered ${this.selection.length} plant.`
 
         this.waterPlantsProgress = true
-        // await this.waterPlants(this.selection)
+        await this.waterPlants(this.selection)
         this.waterPlantsProgress = false
 
         this.showNotification({ message })

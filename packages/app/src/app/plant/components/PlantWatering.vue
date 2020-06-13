@@ -102,6 +102,7 @@
         messages: {
           frequency: [
             'daily',
+            'every other day',
             'semi-weekly',
             'weekly',
             'fortnightly',

@@ -16,6 +16,7 @@
         :name="plant.name"
         :watering="getWateringFrequency(plant)"
         :image-url="plant.imageURL"
+        :plant-actions="plantActions(plant)"
       />
     </li>
   </ul>
@@ -70,6 +71,9 @@
           }
         }
         return ''
+      },
+      plantActions (plant) {
+        return plant.plantActions === undefined ? {} : plant.plantActions
       },
       emitDeleteSelection (item) {
         this.$emit('delete-selection', item)
