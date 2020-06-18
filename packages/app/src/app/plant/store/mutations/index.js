@@ -3,12 +3,14 @@ import add from './add'
 import load from './load'
 import update from './update'
 import deleteM from './delete'
+import water from './water'
 
 export default {
   ...add,
   ...deleteM,
   ...load,
   ...update,
+  ...water,
 
   RESET_SELECTED_PLANT (state, payload) {
     state.plants.selected = Object.assign({}, state.plants.selected, payload.defaultState)

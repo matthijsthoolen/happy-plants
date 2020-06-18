@@ -7,6 +7,7 @@ export default function getPlantStructure () {
     imageURL: '',
     name: '',
     modules: [],
-    tags: []
+    tags: [],
+    plantActions: []
   }
 }
