@@ -28,7 +28,7 @@
         <plant-header
           :content-loading="plantLoading"
           :name="plant.name"
-          :image-url="plant.imageURL"
+          :image-url="getImage"
           v-observe-visibility.60="observeVisibility"
           @update-name="updatePlantName"
           @update-photo="updatePlantPhoto"
@@ -150,6 +150,12 @@
       },
       isPhone () {
         return this.$mq === 'phone'
+      },
+      getImage () {
+        if (typeof this.plant.imageURLMedium !== 'undefined') {
+          return this.plant.imageURLMedium
+        }
+        return false
       }
     },
 
@@ -329,6 +335,7 @@
       updatePlantName (name) {
         this.updateName({ guid: this.plant.guid, name })
       },
+
       updatePlantPhoto (blob) {
         const imageURL = isBlobbable(blob) ? getUrlFromBlob(blob) : this.plant.imageURL
         this.updatePhoto({ guid: this.plant.guid, blob, imageURL })

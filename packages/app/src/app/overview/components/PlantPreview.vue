@@ -45,7 +45,7 @@
           :key="name"
           :alt="name"
           :title="name"
-          :source="imageUrl"
+          :source="isListView ? imageUrlThumb : imageUrl"
         />
         <svgicon
           v-if="!contentLoading && !imageUrl"
@@ -64,7 +64,7 @@
         </div>
 
         <div v-if="watering !== ''" class="watering-frequency">
-          <feather-droplet height="16" width="16" />{{ watering }} <span v-if="daysAgo !== ''">({{ daysAgo }})</span>
+          <feather-droplet height="16" width="16" />{{ watering }} <span v-if="daysAgo !== ''">(in: {{ daysUntilNextWatering }}d)</span>
         </div>
 
         <ul v-if="isListView && tags.length" class="preview-tags">
@@ -106,6 +106,7 @@
       guid: { type: String, default: '', required: true },
       name: { type: String, default: '', required: true },
       imageUrl: { type: [String, Boolean], default: '' },
+      imageUrlThumb: { type: [String, Boolean], default: '' },
       watering: { type: String, default: '', required: false },
       plantActions: { type: Object, default: () => {}, required: true }
     },
@@ -178,6 +179,19 @@
         const diffDays = Math.round(Math.abs((new Date() - lastWateringDate) / 86400000))
 
         return diffDays
+      },
+      daysUntilNextWatering () {
+        const stringDaysToInt = {
+          1: 'daily',
+          2: 'every other day',
+          3: 'semi-weekly',
+          7: 'weekly',
+          14: 'fortnightly',
+          30: 'monthly'
+        }
+
+        const days = this.getKeyByValue(stringDaysToInt, this.watering)
+        return days - this.daysAgo
       }
     },
 
@@ -203,6 +217,9 @@
             (this.categoriseMode && type === 'category' && this.selected)
           )
         }]
+      },
+      getKeyByValue (object, value) {
+        return Object.keys(object).find(key => object[key] === value)
       },
       handleInteraction (event) {
         if (this.contentLoading) return

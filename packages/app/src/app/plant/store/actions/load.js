@@ -35,7 +35,9 @@ async function loadPlantsFirestore (state, commit) {
     const plantExists = state.plants.data.find(p => p.guid === plantData.guid)
 
     if (plantData.imageURL) {
-      plantData.imageURL = await downloadFile(plantData.imageURL)
+      // plantData.imageURLLarge = await downloadFile(plantData.imageURL.replace('.png', '_1000x1000.png'))
+      plantData.imageURLMedium = await downloadFile(plantData.imageURL.replace('.png', '_500x500.png'))
+      plantData.imageURLThumb = await downloadFile(plantData.imageURL.replace('.png', '_175x175.png'))
     }
 
     if (plantExists) {

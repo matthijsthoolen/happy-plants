@@ -15,7 +15,8 @@
         :guid="plant.guid"
         :name="plant.name"
         :watering="getWateringFrequency(plant)"
-        :image-url="plant.imageURL"
+        :image-url-thumb="getImageThumbnail(plant)"
+        :image-url="getImage(plant)"
         :plant-actions="plantActions(plant)"
       />
     </li>
@@ -71,6 +72,18 @@
           }
         }
         return ''
+      },
+      getImageThumbnail (plant) {
+        if (typeof plant.imageURLThumb !== 'undefined') {
+          return plant.imageURLThumb
+        }
+        return false
+      },
+      getImage (plant) {
+        if (typeof plant.imageURLMedium !== 'undefined') {
+          return plant.imageURLMedium
+        }
+        return false
       },
       plantActions (plant) {
         return plant.plantActions === undefined ? {} : plant.plantActions

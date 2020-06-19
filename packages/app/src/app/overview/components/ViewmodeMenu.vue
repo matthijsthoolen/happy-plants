@@ -87,7 +87,9 @@
       'feather-bold': () =>
         import('vue-feather-icons/icons/BoldIcon' /* webpackChunkName: "icons" */),
       'feather-clock': () =>
-        import('vue-feather-icons/icons/ClockIcon' /* webpackChunkName: "icons" */)
+        import('vue-feather-icons/icons/ClockIcon' /* webpackChunkName: "icons" */),
+      'feather-droplet': () =>
+        import('vue-feather-icons/icons/DropletIcon' /* webpackChunkName: "icons" */)
     },
 
     props: {
