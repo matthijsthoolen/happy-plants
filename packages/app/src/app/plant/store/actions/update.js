@@ -29,7 +29,9 @@ export async function updatePlant (action, { state, commit }, data) {
 
     await updateEntryFire(path, {
       ...selected,
-      imageURL: selected.imageURL || `${storagePath(path)}/${fileName}`
+      imageURL: selected.imageURL || `${storagePath(path)}/${fileName}`,
+      imageURLThumb: null,
+      imageURLMedium: null
     })
   }
 

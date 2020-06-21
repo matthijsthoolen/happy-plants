@@ -26,6 +26,8 @@ export default {
     state.updated = payload.updated
     state.plants.selected.modified = payload.updated
     state.plants.selected.imageURL = payload.item.imageURL
+    state.plants.selected.imageURLThumb = payload.item.imageURL
+    state.plants.selected.imageURLMedium = payload.item.imageURL
 
     if (payload.item.blob) {
       state.plants.selected.blob = payload.item.blob

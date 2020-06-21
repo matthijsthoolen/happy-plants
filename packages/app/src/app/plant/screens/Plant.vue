@@ -337,7 +337,7 @@
       },
 
       updatePlantPhoto (blob) {
-        const imageURL = isBlobbable(blob) ? getUrlFromBlob(blob) : this.plant.imageURL
+        const imageURL = isBlobbable(blob) ? getUrlFromBlob(blob) : this.plant.imageURLMedium
         this.updatePhoto({ guid: this.plant.guid, blob, imageURL })
       }
     },

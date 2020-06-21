@@ -4,7 +4,7 @@ import {
   addEntry as addEntryLF,
   deleteEntry as deleteEntryLF
 } from '@/api/localforage'
-import { firestoreQuery, downloadFile } from '@/api/firebase'
+import { firestoreQuery, downloadFile, updateEntry as updateEntryFire } from '@/api/firebase'
 
 const namespace = 'plant-'
 const folder = 'plants'
@@ -27,17 +27,22 @@ async function loadPlantsFirestore (state, commit) {
   }
 
   for (const doc of snapshot.docs) {
-    const plant = await firestoreQuery([
-      ['users', householdOwnerId],
-      [folder, doc.id]
-    ]).get()
+    const path = [['users', householdOwnerId], [folder, doc.id]]
+    const plant = await firestoreQuery(path).get()
     const plantData = plant.data()
     const plantExists = state.plants.data.find(p => p.guid === plantData.guid)
 
-    if (plantData.imageURL) {
+    // console.log(plantData)
+
+    if (plantData.imageURL && (plantData.imageURLMedium == null || plantData.imageURLThumb == null)) {
       // plantData.imageURLLarge = await downloadFile(plantData.imageURL.replace('.png', '_1000x1000.png'))
       plantData.imageURLMedium = await downloadFile(plantData.imageURL.replace('.png', '_500x500.png'))
       plantData.imageURLThumb = await downloadFile(plantData.imageURL.replace('.png', '_175x175.png'))
+
+      await updateEntryFire(path, {
+        imageURLMedium: plantData.imageURLMedium,
+        imageURLThumb: plantData.imageURLThumb
+      })
     }
 
     if (plantExists) {

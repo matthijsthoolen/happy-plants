@@ -25,7 +25,9 @@ async function addPlantFirestore (state, meta) {
   await addEntryFire(path, {
     ...meta,
     blob: null,
-    imageURL: hasFile && `${storagePath(path)}/${fileName}`
+    imageURL: hasFile && `${storagePath(path)}/${fileName}`,
+    imageURLMedium: null,
+    imageURLThumb: null
   })
   if (hasFile) {
     await uploadFile(path.concat(fileName), blob)
