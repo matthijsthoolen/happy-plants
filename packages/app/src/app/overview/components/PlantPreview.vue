@@ -56,7 +56,7 @@
         />
       </div>
 
-      <div :class="['preview-content-inner', { 'three-columns': gallery.length && tags.length }]">
+      <div :class="['preview-content-inner', 'three-columns', { 'four-columns': gallery.length && tags.length }, { 'water-blue': needsWater }]">
         <div class="preview-headline">
           <h1 :class="{ 'ellipsis': name.length > oneLineHeadlineCount }">
             {{ name }}
@@ -157,6 +157,13 @@
           return 'Delete'
         }
         return ''
+      },
+      needsWater () {
+        if (this.watering === '') {
+          return false
+        }
+
+        return this.daysUntilNextWatering <= 0
       },
       wrapperClass () {
         return [`type-${this.type}`, 'box', 'plant-preview', {
@@ -463,6 +470,10 @@
 
       &:not(.three-columns) h1 {
         margin-bottom: calc(var(--base-gap) / 2);
+      }
+
+      &.water-blue {
+        background-color: deepskyblue;
       }
 
       & h1 {
