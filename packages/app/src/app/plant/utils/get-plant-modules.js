@@ -26,7 +26,7 @@ export default function getPlantModules () {
         cloudOnly: true
       },
       value: {
-        plantActions: []
+        plantActions: {}
       }
     },
     {
