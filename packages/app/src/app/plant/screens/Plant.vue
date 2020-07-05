@@ -78,6 +78,7 @@
   import PlantModal from '@/app/plant/components/PlantModal'
   import PlantHeader from '@/app/plant/components/PlantHeader'
   import PlantTags from '@/app/plant/components/PlantTags'
+  import PlantActions from '@/app/plant/components/PlantActions'
   import PlantNotes from '@/app/plant/components/PlantNotes'
   import PlantSeasons from '@/app/plant/components/PlantSeasons'
   import PlantWatering from '@/app/plant/components/PlantWatering'
@@ -101,6 +102,7 @@
       'plant-module-manager': PlantModuleManager,
       'plant-modal': PlantModal,
       'plant-tags': PlantTags,
+      'plant-actions': PlantActions,
       'plant-notes': PlantNotes,
       'plant-seasons': PlantSeasons,
       'plant-watering': PlantWatering,
@@ -210,6 +212,10 @@
       getPlantModuleProps (type) {
         const module = this.plant.modules.find(mod => mod.type === type).value
         switch (type) {
+          case 'actions':
+            return {
+              plantActions: this.plant.plantActions
+            }
           case 'watering':
             return {
               amount: module && (module.level || module.amount),

@@ -12,7 +12,7 @@ describe('app/plant/utils/get-default-structure.js', () => {
       name: '',
       modules: [],
       tags: [],
-      plantActions: []
+      plantActions: {}
     })
   })
 })

@@ -17,6 +17,19 @@ export default function getPlantModules () {
       }
     },
     {
+      type: 'actions',
+      selected: false,
+      meta: {
+        title: 'Plant actions',
+        description: 'Show the last plant actions like watering and fertilizing.',
+        icon: 'droplet',
+        cloudOnly: true
+      },
+      value: {
+        plantActions: []
+      }
+    },
+    {
       type: 'food',
       selected: false,
       meta: {

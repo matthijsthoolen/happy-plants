@@ -9,6 +9,7 @@ import localforage from 'localforage'
 import { extendPrototype } from 'localforage-startswith'
 import { init as initSentry } from '@sentry/browser'
 import * as Integrations from '@sentry/integrations'
+import moment from 'moment'
 
 import App from '@/app/App'
 import router from '@/router'
@@ -80,6 +81,12 @@ if (isProduction) {
     integrations: [new Integrations.Vue({ Vue, attachProps: true })]
   })
 }
+
+Vue.filter('formatDate', function (value) {
+  if (value) {
+    return moment.unix(value / 1000).format('DD/MM/YYYY HH:mm')
+  }
+})
 
 /* eslint-disable no-new */
 new Vue({

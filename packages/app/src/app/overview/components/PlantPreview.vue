@@ -183,9 +183,7 @@
           (a, b) => this.plantActions[a] > this.plantActions[b] ? a : b
         )
         const lastWateringDate = new Date(parseInt(lastWatering))
-        const diffDays = Math.round(Math.abs((new Date() - lastWateringDate) / 86400000))
-
-        return diffDays
+        return Math.round(Math.abs((new Date() - lastWateringDate) / 86400000))
       },
       daysUntilNextWatering () {
         const stringDaysToInt = {
