@@ -1,5 +1,12 @@
 import { PlantModule } from './modules'
 
+export interface PlantEvent {
+  type: number
+  plant: Plant | null
+  created: number
+  completed: boolean
+}
+
 export interface PlantTag {
   created: number
   guid: string
